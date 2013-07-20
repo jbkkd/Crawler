@@ -9,10 +9,8 @@ class UrlAdapter(BaseDB):
         self.url_collection = self.get_collection("url_collection")
 
     def save_url_to_download(self, url):
-        url_document = self.url_collection.find_one({'url': url})
-        if url_document is None:
-            url_document = {'url': url, 'inserted_on': datetime.now(), 'downloaded_on': '', 'html': ''}
-            self.url_collection.insert(url_document)
+        url_document = {'url': url, 'inserted_on': datetime.now(), 'downloaded_on': '', 'html': ''}
+        self.url_collection.insert(url_document)
 
     def get_url(self, url):
         return self.url_collection.find_one({'url': url})
