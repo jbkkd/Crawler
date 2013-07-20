@@ -1,4 +1,4 @@
-XPathCrawlerServerSide
+Crawler
 ======================
 
-The Server Side of the XPath crawler project
+Crawler using Xpaths to extract data.
