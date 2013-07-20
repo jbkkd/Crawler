@@ -3,6 +3,7 @@ __author__ = 'LaptOmer'
 from DB.XPathAdapter import *
 from Urls.Urls import *
 
+
 class XPathsHandler(object):
     def __init__(self, site_main_url):
         self.xpath_adapter = XPathAdapter()
