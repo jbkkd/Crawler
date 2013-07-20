@@ -12,4 +12,3 @@ class BaseDB(object):
 
     def save_to_collection(self, collection, value):
         return collection.insert(value)
-

@@ -28,8 +28,7 @@ function createXPathFromElement(elm) {
 
 $(document).ready(function(){
 	var DataToDB = {};
-    // TODO take the pageType from the server and not manually:
-	var pageType = "thread";
+
     // TODO: make a python(via AJAX) function to get site_link/page_link/page_number
 	var threadQuest = [
 		'site_link',
@@ -57,18 +56,22 @@ $(document).ready(function(){
 		'page_number',
 		'thread_ratings'
 	];
+   	//Init the type of the page:
+	var pageType = "thread";
+    currentQuest = threadQuest;
 
-
-	//Init the type of the page:
-	if(pageType == "thread"){
-		currentQuest = threadQuest;
-	} else if (pageType == "forum"){
-		currentQuest = forumQuest;
-	}
-
+    $("#page_type").change(function(){
+        quest_counter = 0;
+        pageType = $(this).val();
+        if(pageType == "thread"){
+            currentQuest = threadQuest;
+        } else if (pageType == "forum"){
+            currentQuest = forumQuest;
+        }
+        $("#output_DataToDB_list").empty();
+    });
 	//Draggable by UI Jquery lib!
-    $("#output_code").draggable();
-    $("#output_DataToDB").draggable();
+    $(".float_menus").draggable();
 
 	//AJAX sending request to getHTML.py
     $.ajax({
@@ -117,7 +120,7 @@ $(document).ready(function(){
 		$(document).keypress(function(e) {
 			if(e.which == 13 && quest_counter < currentQuest.length) {
 				DataToDB[currentQuest[quest_counter]] = SelectedXpath;
-                $("#output_DataToDB").append(currentQuest[quest_counter] + ": <textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br><br>");
+                $("#output_DataToDB_list").append(currentQuest[quest_counter] + ": <textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br><br>");
                 $('#text_' + currentQuest[quest_counter]).val(SelectedXpath);
                 if(quest_counter == currentQuest.length - 1){
                     $("#output_DataToDB").append("<input type='button' id='update_DataToDB_button' value='Save!'>");

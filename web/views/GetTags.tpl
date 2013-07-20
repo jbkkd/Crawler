@@ -9,11 +9,17 @@
 
 </head>
 <body>
-<div id="output_DataToDB" class="float_menus"><u>XPaths history:</u><br></div>
+<div id="output_DataToDB" class="float_menus">
+    <u>Currently XPaths Data:</u><br>
+    <select id="page_type">
+        <option>forum</option>
+        <option>thread</option>
+    </select>
+<div id="output_DataToDB_list"></div>
+</div>
 <div id="output_code" class="float_menus">
     Hey, please select the:
-    <i><div id="quest">
-    </div></i>
+    <i><div id="quest"></div></i>
     and press <b>ENTER</b>
     <br><br> <b>XPath:</b><br>
     <div id="selected_xpath"></div><hr>
