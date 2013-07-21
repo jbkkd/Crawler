@@ -6473,35 +6473,38 @@ def site_stringy():
     return output
 
 
-
 # Get url and post back the html, if not posted return the default
 @application.post('/a')
 def build_page():
-    if request.json is not None and request.json["newURL"] != "":
+    if request.json is not None and "newURL" in request.json.keys():  # User asks for new url
         baseHTML = request.json["newURL"]
-    elif request.json is not None and request.json["site_link"] != "":
-        pass  # decide what to do next, and also save the data from request.json
+        return "newURL"
+    elif request.json is not None and "site_link" in request.json.keys():  # User sending DataToDB
+        a = XPathsHandler(request.json["site_link"])
+        new_data = request.json
+        del new_data["site_link"]
+        a.save_xpaths("asd", new_data)
+        return "Tnx for the data. We WILL use it! "
     else:
-        # showthread.php?p=3850337
         baseHTML = 'http://forums.macrumors.com/showthread.php?t=1611153'
 
     # user_agent = "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)"  # Or any valid user agent from a real browser
     # headers = {"User-Agent": user_agent}
     # req = urllib2.Request(baseHTML, headers=headers)
     # forumHTML = urllib2.urlopen(req)
+
     forumHTML = site_stringy()
     page = Soup(forumHTML)
 
-    for e in page.findAll('script'):
+    for e in page.findAll(['script', 'link']):
         e.extract()
-
     return str(page)
 
 @route('/static/<filename>', name='static')
 def send_static(filename):
     return static_file(filename, root='static')
 
-#  get dic and save its
+#  Show us the Home Page
 @route('/')
 def index():
     output = template(os.path.realpath("views\\GetTags.tpl"))

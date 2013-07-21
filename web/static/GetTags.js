@@ -69,6 +69,7 @@ $(document).ready(function(){
             currentQuest = forumQuest;
         }
         $("#output_DataToDB_list").empty();
+        $("#quest").text(currentQuest[0]);
     });
 	//Draggable by UI Jquery lib!
     $(".float_menus").draggable();
@@ -95,7 +96,6 @@ $(document).ready(function(){
             url: "/a",
             type: "POST",
             data: JSON.stringify(DataToDB),
-            dataType: "json",
             contentType: "application/json",
             success: function(data){
                 alert(data);
@@ -116,7 +116,7 @@ $(document).ready(function(){
         });
     });
 
-	//ENTER event handle, change the quest
+	//ENTER event handle
 		$(document).keypress(function(e) {
 			if(e.which == 13 && quest_counter < currentQuest.length) {
 				DataToDB[currentQuest[quest_counter]] = SelectedXpath;
@@ -130,7 +130,7 @@ $(document).ready(function(){
 			}
 	});
 
-	//scrolling the output_code div to my view
+	//Scrolling the output_code div to my view
 	$(window).scroll(function () {
         var set1 = $(document).scrollTop();
 		var p = $("#output_code").position();
