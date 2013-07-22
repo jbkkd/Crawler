@@ -16,9 +16,9 @@
 		-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 	}
 
-	th, td {padding:18px 28px 18px; text-align:center; }
+	th, td {padding:10px 28px 12px; text-align:center; }
 
-	th {padding-top:22px; text-shadow: 1px 1px 1px #fff; background:#e8eaeb;}
+	th {padding-top:10px; padding-bottom: 10px; text-shadow: 1px 1px 1px #fff; background:#e8eaeb;}
 
 	td {border-top:1px solid #e0e0e0; border-right:1px solid #e0e0e0;}
 

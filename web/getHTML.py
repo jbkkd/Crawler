@@ -6,6 +6,7 @@ import urllib2
 from just_stupid_function import site_stringy
 import os
 from XPaths.XPaths import XPathsHandler
+from Urls.Urls import UrlsHandler
 from bottle import route, run, default_app, request, template, static_file, SimpleTemplate
 
 import time
@@ -46,15 +47,17 @@ def build_page():
 def send_static(filename):
     return static_file(filename, root='static')
 
-#  Show us the Home Page
-@route('/')
+
+@route('/GetTags')
 def index():
     output = template(os.path.realpath("views\\GetTags.tpl"))
     return output
 
 @route('/GetURLs')
 def index():
-    output = template(os.path.realpath("views\\GetURLs.tpl"))
+    urls_handler = UrlsHandler()
+    x = urls_handler.get_all_urls()
+    output = template(os.path.realpath("views\\GetURLs.tpl"), list_url=x)
     return output
 
 run(application, host='localhost', port=8080, debug=True, reloader=True)

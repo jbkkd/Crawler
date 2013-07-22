@@ -11,11 +11,15 @@
         <tr>
             <th>Site URL</th>
             <th>Data added</th>
+            <th>Action</th>
         </tr>
+        %for i in list_urls:
         <tr>
-            <td>1</td>
-            <td>2</td>
+            <td>{{i}}</td>
+            <td>22222</td>
+            <td><a href="#{{i}}" id="Edit{{i}}">Edit</a> / <a href="#{{i*i}}" id="Delete{{i}}">Delete</a></td>
         </tr>
+        %end
     </table>
 </div>
 </body>
