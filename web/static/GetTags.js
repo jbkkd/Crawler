@@ -28,6 +28,7 @@ function createXPathFromElement(elm) {
 
 $(document).ready(function(){
 	var DataToDB = {};
+	var pageType = "thread";
 
     // TODO: make a python(via AJAX) function to get site_link/page_link/page_number
 	var threadQuest = [
@@ -57,7 +58,6 @@ $(document).ready(function(){
 		'thread_ratings'
 	];
    	//Init the type of the page:
-	var pageType = "thread";
     currentQuest = threadQuest;
 
     $("#page_type").change(function(){
@@ -69,6 +69,7 @@ $(document).ready(function(){
             currentQuest = forumQuest;
         }
         $("#output_DataToDB_list").empty();
+        $("#update_DataToDB_button").remove();
         $("#quest").text(currentQuest[0]);
     });
 	//Draggable by UI Jquery lib!
@@ -91,6 +92,7 @@ $(document).ready(function(){
         $.each(DataToDB, function(key){
             DataToDB[key] = $("#text_" + key).val();
         });
+        DataToDB["page_type"] = $("#page_type").val();
 
         $.ajax({
             url: "/a",
