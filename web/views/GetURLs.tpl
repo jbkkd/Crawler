@@ -13,7 +13,6 @@
             <th>Data added</th>
             <th>Action</th>
         </tr>
-
         %for i in list_urls:
         <tr>
             <td>{{i}}</td>

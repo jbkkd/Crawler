@@ -75,7 +75,7 @@ $(document).ready(function(){
 	//Draggable by UI Jquery lib!
     $(".float_menus").draggable();
 
-	//AJAX sending request to getHTML.py
+	//AJAX sending request to mainroute.py
     $.ajax({
         url: "/a",
         type: "POST",

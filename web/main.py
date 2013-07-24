@@ -49,15 +49,20 @@ def send_static(filename):
 
 
 @route('/GetTags')
-def index():
+def GetTags():
     output = template(os.path.realpath("views\\GetTags.tpl"))
     return output
 
 @route('/GetURLs')
-def index():
-    urls_handler = UrlsHandler()
-    x = urls_handler.get_all_urls()
-    output = template(os.path.realpath("views\\GetURLs.tpl"), list_url=x)
+def GetURLs():
+    # urls_handler = UrlsHandler()
+    # x = urls_handler.get_all_urls()
+    output = template(os.path.realpath("views\\GetURLs.tpl"))
+    return output
+
+@route('/scrapy')
+def GetURLs():
+    output = template(os.path.realpath("views\\GetURLs.tpl"))
     return output
 
 run(application, host='localhost', port=8080, debug=True, reloader=True)
