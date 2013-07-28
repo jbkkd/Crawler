@@ -6,7 +6,24 @@
 from scrapy.item import Item, Field
 
 
-class ScrapperItem(Item):
+class Post(Item):
+    # define the fields for your item here like:
     title = Field()
-    link = Field()
-    desc = Field()
+    content = Field()
+    username = Field()
+    id = Field()
+    page_number = Field()
+    thread_id = Field()
+    date = Field()
+    pass
+
+
+class Thread(Item):
+    # define the fields for your item here like:
+    title = Field()
+    replies = Field()
+    views = Field()
+    id = Field()
+    forum_id = Field()
+    page_number = Field()
+    pass
