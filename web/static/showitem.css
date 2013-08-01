@@ -1,0 +1,31 @@
+    html, body, div, header, footer, aside, nav, article, section	{ margin: 0; padding: 0; }
+    header, footer, aside, nav, article, section	{ display: block; }
+    body 			{ color: #333; font: 12px Helvetica, Arial, sans-serif; line-height: 18px; }
+    h2				{ color: #333; }
+    a				{ color: #337810; }
+    p				{ margin: 0 0 18px; }
+    #container		{ width: 80%; margin: 0 auto;}
+    #wrapper		{ float: left; width: 100%; }
+
+    /* Header */
+    header			{ background: #333; border-bottom: 2px solid #aaa; }
+    header h1  	{ color: #fff; margin: 0 0 3px; padding: 24px 18px 0; }
+    header p		{ color: #ccc; font-size: 11px; font-weight: bold; padding: 0 18px; }
+
+    /* Content Style */
+    nav		{ border-bottom: 1px solid #ccc; }
+    nav ul	{ padding: 0 18px 9px; }
+    #extra			{ border-bottom: 1px solid #ccc; }
+    #extra small	{ font-size: 11px; line-height: 18px; }
+    #content		{ width:90% }
+    #content p, #extra p { padding-right: 18px; }
+
+    /* Content Positioning and Size */
+    nav		{ float: left; margin-left: -200px; width: 120px; }
+    #content		{ margin: 0 215px 36px 0; }
+    #extra			{ float: left; margin-left: 0; width:70%; }		/* Footer */
+    footer			{ background: #666; border-bottom: 2px solid #aaa; clear: left; width: 100%; }
+    footer a		{ color: #fff; }
+    footer	p		{ color: #ccc; margin: 0; padding: 0 18px 10px; }
+    footer ul		{ border-bottom: 1px solid #999; list-style: none; margin: 0 18px 6px; padding: 10px 0 6px; }
+    footer li		{ display: inline; font-size: 11px; font-weight: bold; padding-right: 5px; }

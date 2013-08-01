@@ -2,7 +2,8 @@ __author__ = 'OrDuan'
 
 from scrapy.spider import BaseSpider
 from scrapy.selector import HtmlXPathSelector
-from scrapper.items import Post
+# from scrapper.items import Post
+
 
 class TestSpider(BaseSpider):
     name = "testspider"

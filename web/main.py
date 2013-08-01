@@ -49,20 +49,26 @@ def send_static(filename):
 
 
 @route('/GetTags')
-def GetTags():
+def getTags():
     output = template(os.path.realpath("views\\GetTags.tpl"))
     return output
 
 @route('/GetURLs')
-def GetURLs():
+def getURLs():
     # urls_handler = UrlsHandler()
     # x = urls_handler.get_all_urls()
     output = template(os.path.realpath("views\\GetURLs.tpl"))
     return output
 
-@route('/scrapy')
-def GetURLs():
-    output = template(os.path.realpath("views\\GetURLs.tpl"))
+@route('/admin')
+def admin():
+    # TODO: scrapy Setting and Start option.
+    return None
+
+@route('/showitem')
+def showitem():
+    output = template(os.path.realpath("views\\showitem.tpl"))
     return output
+
 
 run(application, host='localhost', port=8080, debug=True, reloader=True)
