@@ -70,5 +70,10 @@ def showitem():
     output = template(os.path.realpath("views\\showitem.tpl"))
     return output
 
+@route('/xpath')
+def showitem():
+    output = template(os.path.realpath("xpath.html"))
+    return output
+
 
 run(application, host='localhost', port=8080, debug=True, reloader=True)

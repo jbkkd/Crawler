@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-<html>
 <head>
     <title>Show item</title>
     <script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>

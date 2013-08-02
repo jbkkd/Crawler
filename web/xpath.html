@@ -1,43 +1,49 @@
-<html>
+<!DOCTYPE HTML>
 	<head>
 		<title> LALALALA</title>
-		<script src="jquery-2.0.3.min.js"></script>
+		<script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
 		<script type="text/javascript">
-			
+
 				var currentElmStart, currentElmEnd;
 				var ListOfElements = [];
 				var xPath;
-			
+                var indexOfStart = 0;
+                var indexOfEnd = 0;
+
 			$(document).ready(function(){
 				$(document).on("click", "#testArea", function(evt){
-					//currentElmStart = evt.target;
-					//currentElmEnd = evt.target;
-					//xPath = GetXpathOfElement(currentElmStart);
 					GenerateList(evt.target);
+                    indexOfEnd = ListOfElements.length-1;
 					console.log(ListOfElements);
 				});
-				
-				$("#plusStart").on("click", function(){
-					currentElmStart = currentElmStart.parentNode;
-					tempXpath = GetXpathOfElement(currentElmStart);
-					if (xPath.indexOf("//") == 0) {
-						xPath = xPath.slice(1, xPath.length);
-					}
-					tempXpath += xPath;
-					xPath = tempXpath;
-					console.log(xPath);
-				});
-				
-				
-				$("#minusEnd").on("click", function(){
-					tempXpath = GetXpathOfElement(currentElmEnd);
-					tempXpath = tempXpath.slice(1,tempXpath.length);
-					xPath = xPath.slice(0, xPath.indexOf(tempXpath));
-					currentElmEnd = currentElmEnd.parentNode;
 
-					console.log(xPath);
+				$("#plusStart").on("click", function(){
+                    indexOfStart--;
+				});
+
+                $("#minusStart").on("click", function(){
+                    indexOfStart++;
+				});
+
+				$("#plusEnd").on("click", function(){
+                    indexOfEnd++;
+				});
+
+                $("#minusEnd").on("click", function(){
+                    indexOfEnd--;
 				});
 			});
+
+            function ShowXpathString(){
+                var outputXpath = "//";
+                for(var i = indexOfStart; i <= indexOfEnd; i++){
+                    outputXpath += ListOfElements[i] + "/";
+                }
+                outputXpath.slice(0, outputXpath.length-1);
+                console.log(outputXpath);
+                console.log(indexOfStart);
+                console.log(indexOfEnd);
+            }
 			function GenerateList(elm) {
 				var tempXpath = "";
 				while (elm.nodeName.toLowerCase() != "body") {
@@ -46,8 +52,7 @@
 					elm = elm.parentNode;
 				}
 			}
-			function GetXpathOfElement(elm)
-			{
+			function GetXpathOfElement(elm){
 				elmNodeName = elm.nodeName.toLowerCase();
 				xpathOfCurrentElement = elmNodeName;
 				xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "id");
@@ -58,9 +63,8 @@
 				}
 				return xpathOfCurrentElement;
 			}
-			
-			function GetXpathWithAttribute(xpath, elm, attribute)
-			{
+
+			function GetXpathWithAttribute(xpath, elm, attribute){
 				if (elm.hasAttribute(attribute))
 				{
 					if (xpath.indexOf("[") == -1)
@@ -80,11 +84,15 @@
 	<body>
 		<div id="testArea">
 			<span>
-				<a id="thisisa">Google is here</a>
+
+                <div id="additionaldivfornoreson">
+                    <a id="thisisa">Google is here</a>
+                    <span id="thisspan" class="spanclass">
+                        this is a span
+                    </span>
+                </div>
 			</span>
-			<span id="thisspan" class="spanclass">
-				this is a span
-			</span>
+
 		</div>
 		<div id="controls">
 			Start:
