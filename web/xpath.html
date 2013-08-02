@@ -1,88 +1,88 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title> LALALALA</title>
-		<script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
-		<script type="text/javascript">
+<head>
+    <title> LALALALA</title>
+    <script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
 
-				var ListOfElements = [];
-				var xPath;
-                var indexOfStart = 0;
-                var indexOfEnd = 0;
+        var ListOfElements = [];
+        var xPath;
+        var indexOfStart = 0;
+        var indexOfEnd = 0;
 
-			$(document).ready(function(){
-				$(document).on("click", "#testArea", function(evt){
-					GenerateList(evt.target);
-                    indexOfEnd = ListOfElements.length-1;
-					console.log(ListOfElements);
-				});
+        $(document).ready(function(){
+            $(document).on("click", "#testArea", function(evt){
+                GenerateList(evt.target);
+                indexOfEnd = ListOfElements.length-1;
+                console.log(ListOfElements);
+            });
 
-				$("#plusStart").on("click", function(){
-                    indexOfStart--;
-				});
+            $("#plusStart").on("click", function(){
+                indexOfStart--;
+            });
 
-                $("#minusStart").on("click", function(){
-                    indexOfStart++;
-				});
+            $("#minusStart").on("click", function(){
+                indexOfStart++;
+            });
 
-				$("#plusEnd").on("click", function(){
-                    indexOfEnd++;
-				});
+            $("#plusEnd").on("click", function(){
+                indexOfEnd++;
+            });
 
-                $("#minusEnd").on("click", function(){
-                    indexOfEnd--;
-				});
-			});
+            $("#minusEnd").on("click", function(){
+                indexOfEnd--;
+            });
+        });
 
-            function ShowXpathString(){
-                var outputXpath = "//";
-                for(var i = indexOfStart; i <= indexOfEnd; i++){
-                    outputXpath += ListOfElements[i] + "/";
-                }
-                outputXpath.slice(0, outputXpath.length-1);
-                console.log(outputXpath);
-                console.log(indexOfStart);
-                console.log(indexOfEnd);
+        function ShowXpathString(){
+            var outputXpath = "//";
+            for(var i = indexOfStart; i <= indexOfEnd; i++){
+                outputXpath += ListOfElements[i] + "/";
             }
-			function GenerateList(elm) {
-				var tempXpath = "";
-				while (elm.nodeName.toLowerCase() != "body") {
-					tempXpath = GetXpathOfElement(elm);
-					ListOfElements.unshift(tempXpath);
-					elm = elm.parentNode;
-				}
-			}
-			function GetXpathOfElement(elm){
-				elmNodeName = elm.nodeName.toLowerCase();
-				xpathOfCurrentElement = elmNodeName;
-				xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "id");
-				xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "class");
-				if (xpathOfCurrentElement.indexOf("[") >= 0)
-				{
-					xpathOfCurrentElement += "]";
-				}
-				return xpathOfCurrentElement;
-			}
+            outputXpath.slice(0, outputXpath.length-1);
+            console.log(outputXpath);
+            console.log(indexOfStart);
+            console.log(indexOfEnd);
+        }
+        function GenerateList(elm) {
+            var tempXpath = "";
+            while (elm.nodeName.toLowerCase() != "body") {
+                tempXpath = GetXpathOfElement(elm);
+                ListOfElements.unshift(tempXpath);
+                elm = elm.parentNode;
+            }
+        }
+        function GetXpathOfElement(elm){
+            elmNodeName = elm.nodeName.toLowerCase();
+            xpathOfCurrentElement = elmNodeName;
+            xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "id");
+            xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "class");
+            if (xpathOfCurrentElement.indexOf("[") >= 0)
+            {
+                xpathOfCurrentElement += "]";
+            }
+            return xpathOfCurrentElement;
+        }
 
-			function GetXpathWithAttribute(xpath, elm, attribute){
-				if (elm.hasAttribute(attribute))
-				{
-					if (xpath.indexOf("[") == -1)
-					{
-						xpath += "[";
-					}
-					else
-					{
-						xpath += " and "
-					}
-					xpath += "@" + attribute + "='" + elm.attributes[attribute].value + "'";
-				}
-				return xpath;
-			}
-		</script>
-	</head>
-	<body>
-		<div id="testArea">
+        function GetXpathWithAttribute(xpath, elm, attribute){
+            if (elm.hasAttribute(attribute))
+            {
+                if (xpath.indexOf("[") == -1)
+                {
+                    xpath += "[";
+                }
+                else
+                {
+                    xpath += " and "
+                }
+                xpath += "@" + attribute + "='" + elm.attributes[attribute].value + "'";
+            }
+            return xpath;
+        }
+    </script>
+</head>
+<body>
+<div id="testArea">
 			<span>
 
                 <div id="additionaldivfornoreson">
@@ -93,15 +93,15 @@
                 </div>
 			</span>
 
-		</div>
-		<div id="controls">
-			Start:
-			<input id="plusStart" type="button" value="+" />
-			<input id="minusStart" type="button" value="-" />
-			<br><br>
-			End:
-			<input id="plusEnd" type="button" value="+" />
-			<input id="minusEnd" type="button" value="-" />
-		</div>
-	</body>
+</div>
+<div id="controls">
+    Start:
+    <input id="plusStart" type="button" value="+" />
+    <input id="minusStart" type="button" value="-" />
+    <br><br>
+    End:
+    <input id="plusEnd" type="button" value="+" />
+    <input id="minusEnd" type="button" value="-" />
+</div>
+</body>
 </html>
