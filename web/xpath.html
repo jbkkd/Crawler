@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title> LALALALA</title>
+		<script src="jquery-2.0.3.min.js"></script>
+		<script type="text/javascript">
+			
+				var currentElmStart, currentElmEnd;
+				var ListOfElements = [];
+				var xPath;
+			
+			$(document).ready(function(){
+				$(document).on("click", "#testArea", function(evt){
+					//currentElmStart = evt.target;
+					//currentElmEnd = evt.target;
+					//xPath = GetXpathOfElement(currentElmStart);
+					GenerateList(evt.target);
+					console.log(ListOfElements);
+				});
+				
+				$("#plusStart").on("click", function(){
+					currentElmStart = currentElmStart.parentNode;
+					tempXpath = GetXpathOfElement(currentElmStart);
+					if (xPath.indexOf("//") == 0) {
+						xPath = xPath.slice(1, xPath.length);
+					}
+					tempXpath += xPath;
+					xPath = tempXpath;
+					console.log(xPath);
+				});
+				
+				
+				$("#minusEnd").on("click", function(){
+					tempXpath = GetXpathOfElement(currentElmEnd);
+					tempXpath = tempXpath.slice(1,tempXpath.length);
+					xPath = xPath.slice(0, xPath.indexOf(tempXpath));
+					currentElmEnd = currentElmEnd.parentNode;
+
+					console.log(xPath);
+				});
+			});
+			function GenerateList(elm) {
+				var tempXpath = "";
+				while (elm.nodeName.toLowerCase() != "body") {
+					tempXpath = GetXpathOfElement(elm);
+					ListOfElements.unshift(tempXpath);
+					elm = elm.parentNode;
+				}
+			}
+			function GetXpathOfElement(elm)
+			{
+				elmNodeName = elm.nodeName.toLowerCase();
+				xpathOfCurrentElement = elmNodeName;
+				xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "id");
+				xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "class");
+				if (xpathOfCurrentElement.indexOf("[") >= 0)
+				{
+					xpathOfCurrentElement += "]";
+				}
+				return xpathOfCurrentElement;
+			}
+			
+			function GetXpathWithAttribute(xpath, elm, attribute)
+			{
+				if (elm.hasAttribute(attribute))
+				{
+					if (xpath.indexOf("[") == -1)
+					{
+						xpath += "[";
+					}
+					else
+					{
+						xpath += " and "
+					}
+					xpath += "@" + attribute + "='" + elm.attributes[attribute].value + "'";
+				}
+				return xpath;
+			}
+		</script>
+	</head>
+	<body>
+		<div id="testArea">
+			<span>
+				<a id="thisisa">Google is here</a>
+			</span>
+			<span id="thisspan" class="spanclass">
+				this is a span
+			</span>
+		</div>
+		<div id="controls">
+			Start:
+			<input id="plusStart" type="button" value="+" />
+			<input id="minusStart" type="button" value="-" />
+			<br><br>
+			End:
+			<input id="plusEnd" type="button" value="+" />
+			<input id="minusEnd" type="button" value="-" />
+		</div>
+	</body>
+</html>
