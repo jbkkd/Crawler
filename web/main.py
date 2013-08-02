@@ -48,16 +48,16 @@ def send_static(filename):
     return static_file(filename, root='static')
 
 
-@route('/GetTags')
+@route('/getxpath')
 def getTags():
-    output = template(os.path.realpath("views\\GetTags.tpl"))
+    output = template(os.path.realpath("views\\getxpath.tpl"))
     return output
 
-@route('/GetURLs')
+@route('/geturl')
 def getURLs():
     # urls_handler = UrlsHandler()
     # x = urls_handler.get_all_urls()
-    output = template(os.path.realpath("views\\GetURLs.tpl"))
+    output = template(os.path.realpath("views\\geturl.tpl"))
     return output
 
 @route('/admin')
