@@ -3,49 +3,74 @@
 <head>
     <title> LALALALA</title>
     <script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', filename='jquery.xpath.js') }}" type="text/javascript"></script>
+    <style>
+        .onhover{
+            outline: 2px solid #de0002;
+        }
+    </style>
     <script type="text/javascript">
 
         var ListOfElements = [];
         var xPath;
         var indexOfStart = 0;
         var indexOfEnd = 0;
+        var outputXpath = "";
 
         $(document).ready(function(){
-            $(document).on("click", "#testArea", function(evt){
+//            $(document).on("mouseover", "#testArea", function(evt){
+//                GenerateList(evt.target);
+//                if(outputXpath){
+//                    $(document).xpath(outputXpath).removeClass("onhover");
+//                }
+//                indexOfEnd = ListOfElements.length-1;
+//                ShowXpathString();
+//            });
+            $('#testArea').mouseover(function (evt) {
                 GenerateList(evt.target);
-                indexOfEnd = ListOfElements.length-1;
-                console.log(ListOfElements);
+                indexOfEnd = ListOfElements.length - 1;
+                ShowXpathString();
+                $(evt.target).addClass("onhover");
+            }).mouseout(function(evt){
+                $(evt.target).removeClass("onhover");
             });
 
             $("#plusStart").on("click", function(){
                 indexOfStart--;
+                ShowXpathString();
             });
 
             $("#minusStart").on("click", function(){
                 indexOfStart++;
+                ShowXpathString();
             });
 
             $("#plusEnd").on("click", function(){
                 indexOfEnd++;
+                ShowXpathString();
             });
 
             $("#minusEnd").on("click", function(){
                 indexOfEnd--;
+                ShowXpathString();
             });
         });
 
         function ShowXpathString(){
-            var outputXpath = "//";
+            outputXpath = "//";
             for(var i = indexOfStart; i <= indexOfEnd; i++){
                 outputXpath += ListOfElements[i] + "/";
             }
-            outputXpath.slice(0, outputXpath.length-1);
+            outputXpath = outputXpath.slice(0, outputXpath.length-1);
+
+            console.log(ListOfElements);
             console.log(outputXpath);
             console.log(indexOfStart);
             console.log(indexOfEnd);
         }
         function GenerateList(elm) {
             var tempXpath = "";
+            ListOfElements = [];
             while (elm.nodeName.toLowerCase() != "body") {
                 tempXpath = GetXpathOfElement(elm);
                 ListOfElements.unshift(tempXpath);
@@ -83,25 +108,15 @@
 </head>
 <body>
 <div id="testArea">
-			<span>
-
-                <div id="additionaldivfornoreson">
-                    <a id="thisisa">Google is here</a>
-                    <span id="thisspan" class="spanclass">
-                        this is a span
-                    </span>
-                </div>
-			</span>
-
+    <span>
+        <div id="additionaldivfornoreson">
+            <a id="thisisa">Google is here</a>
+            <span id="thisspan" class="spanclass">
+                this is a span
+            </span>
+        </div>
+    </span>
 </div>
-<div id="controls">
-    Start:
-    <input id="plusStart" type="button" value="+" />
-    <input id="minusStart" type="button" value="-" />
-    <br><br>
-    End:
-    <input id="plusEnd" type="button" value="+" />
-    <input id="minusEnd" type="button" value="-" />
-</div>
+
 </body>
 </html>

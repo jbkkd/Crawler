@@ -17,5 +17,10 @@
 	text-align: center;
     z-index: 10000;
     overflow:auto;
-
+}
+.elmHover{
+    outline: 2px solid #de0002;
+}
+.selectedXpathHighLight{
+    outline: 2px solid #262ef0;
 }

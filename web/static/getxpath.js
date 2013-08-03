@@ -1,30 +1,65 @@
-var SelectedXpath = "";
 var quest_counter = 0;
 var currentQuest = [];
 
-//Change the output_code to show the XPath
-function change_me(id){
-	SelectedXpath = createXPathFromElement(id);
-	$('#selected_xpath').html(SelectedXpath);
+//Vars for XPaths Generator:
+var ListOfElements = [];
+var indexOfStart = 0;
+var indexOfEnd = 0;
+var hoverXpath = "";
+var SelectedList;  //List of tags of the selected element
+var SelectedStart;
+var SelectedEnd;
+
+function GetXpathString(start, end, list){
+    var tempXpath;
+    tempXpath = "//";
+    for(var i = start; i <= end; i++){
+        tempXpath += list[i] + "/";
+    }
+    tempXpath = tempXpath.slice(0, tempXpath.length-1);
+
+
+    return tempXpath;
+}
+function GenerateList(elm) {
+    var tempXpath = "";
+    ListOfElements = [];
+    while (elm.id != "output_view") {
+        tempXpath = GetXpathOfElement(elm);
+        ListOfElements.unshift(tempXpath);
+        elm = elm.parentNode;
+    }
+}
+function GetXpathOfElement(elm){
+    var xpathOfCurrentElement;
+
+    xpathOfCurrentElement = elm.nodeName.toLowerCase();
+    xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "id");
+    xpathOfCurrentElement = GetXpathWithAttribute(xpathOfCurrentElement, elm, "class");
+    if (xpathOfCurrentElement.indexOf("[") >= 0)
+    {
+        xpathOfCurrentElement += "]";
+    }
+    return xpathOfCurrentElement;
 }
 
-//Generate XPath code:
-function createXPathFromElement(elm) {
-	for (segs = []; elm && elm.nodeType == 1; elm = elm.parentNode)
-	{
-		if (elm.hasAttribute('id')) {
-			segs.unshift(elm.localName.toLowerCase() + '[@id="' + elm.getAttribute('id') + '"]');
-			return segs.join("/");
-		} else if (elm.hasAttribute('class')) {
-			segs.unshift(elm.localName.toLowerCase() + '[@class="' + elm.getAttribute('class') + '"]');
-		} else {
-			for (i = 1, sib = elm.previousSibling; sib; sib = sib.previousSibling) {
-				if (sib.localName == elm.localName)  i++; }
-			segs.unshift(elm.localName.toLowerCase() + '[' + i + ']');
-		}
-	}
-	return segs.length ? '/' + segs.join('/') : null;
+function GetXpathWithAttribute(xpath, elm, attribute){
+    if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != "")
+    {
+        if (xpath.indexOf("[") == -1)
+        {
+            xpath += "[";
+        }
+        else
+        {
+            xpath += " and "
+        }
+        xpath += "@" + attribute + "='" + elm.attributes[attribute].value + "'";
+    }
+    return xpath;
 }
+
+
 
 $(document).ready(function(){
 	var DataToDB = {};
@@ -119,11 +154,21 @@ $(document).ready(function(){
     });
 
 	//ENTER event handle
-		$(document).keypress(function(e) {
+		$(document).keypress(function(e) { // TODO: this event isn't working with the new xpath yet
 			if(e.which == 13 && quest_counter < currentQuest.length) {
-				DataToDB[currentQuest[quest_counter]] = SelectedXpath;
-                $("#output_DataToDB_list").append(currentQuest[quest_counter] + ": <textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br><br>");
-                $('#text_' + currentQuest[quest_counter]).val(SelectedXpath);
+				DataToDB[currentQuest[quest_counter]] = GetXpathString();
+                SelectedList = ListOfElements;
+                SelectedStart = indexOfStart;
+                SelectedEnd = indexOfEnd;
+                $("#controls").remove();
+                $("#output_DataToDB_list").append(currentQuest[quest_counter] + ":<textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br>" +
+                    "<div id='controls'>Start:<input id='plusStart' type='button' value='+' />" +
+                    "<input id='minusStart' type='button' value='-' /><br><br>End:<input id='plusEnd' type='button' value='+' />" +
+                    "<input id='minusEnd' type='button' value='-'/><br>");
+                var currentXpath = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
+                $('#text_' + currentQuest[quest_counter]).val(currentXpath);
+                $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+                $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
                 if(quest_counter == currentQuest.length - 1){
                     $("#output_DataToDB").append("<input type='button' id='update_DataToDB_button' value='Save!'>");
                 }
@@ -131,6 +176,59 @@ $(document).ready(function(){
                 $("#quest").text(currentQuest[quest_counter]);
 			}
 	});
+    //All the events for the +/- for the xpath
+    $("#output_DataToDB").on("click", "#plusStart", function(){
+        var currentXpath;
+        SelectedStart--;
+        currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
+        $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
+        $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+        $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+    });
+
+    $("#output_DataToDB").on("click", "#minusStart", function(){
+        var currentXpath;
+        SelectedStart++;
+        currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
+         $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
+        $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+        $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+    });
+
+    $("#output_DataToDB").on("click", "#plusEnd", function(){
+        var currentXpath;
+        SelectedEnd++;
+        currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
+         $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
+        $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+        $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+    });
+
+    $("#output_DataToDB").on("click", "#minusEnd", function(){
+        var currentXpath;
+        SelectedEnd--;
+        currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
+         $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
+        $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+        $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+    });
+
+    //Event handler for hover:
+    $('#output_view').mouseover(function (evt) {
+        GenerateList(evt.target);
+        indexOfEnd = ListOfElements.length - 1;
+        hoverXpath = GetXpathString(indexOfStart,indexOfEnd, ListOfElements);
+
+            $(evt.target).addClass("elmHover");
+            $('#selected_xpath').html(hoverXpath);
+
+    }).mouseout(function(evt){
+            $(evt.target).removeClass("elmHover");
+            if(!$(evt.target).class){
+                $(evt.target).removeAttr("class");
+            }
+        });
+
 
 	//Scrolling the output_code div to my view
 	$(window).scroll(function () {
