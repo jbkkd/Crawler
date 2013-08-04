@@ -15,6 +15,10 @@ var indexOfSelectionStart, indexOfSelectionEnd;
 var SelectedTextArea;
 
 
+/**
+ * Function that get the list of the elements and return string out of it,
+ * the first element will be "start" and the last will be "end"(by index).
+ */
 function GetXpathString(start, end, list){
     var tempXpath;
     tempXpath = "//";
@@ -27,6 +31,11 @@ function GetXpathString(start, end, list){
     return tempXpath;
 }
 
+
+/**
+ * Function that gets an element and start to scan all his parents up to "output_view".
+ * the function changes the global var of ListOfElements - which is list of all the parents.
+ */
 function GenerateList(elm) {
     var tempXpath = "";
     ListOfElements = [];
@@ -36,6 +45,11 @@ function GenerateList(elm) {
         elm = elm.parentNode;
     }
 }
+
+/**
+ * Function that looks for all the attributes the element have, by useing GetXpathWithAttribute(),
+ * it returns the correct xpath of a !!specific!! element.
+ */
 function GetXpathOfElement(elm){
     var xpathOfCurrentElement;
     xpathOfCurrentElement = elm.nodeName.toLowerCase();
@@ -48,6 +62,11 @@ function GetXpathOfElement(elm){
     return xpathOfCurrentElement;
 }
 
+
+/**
+ * Function that that the current xpath, new elm, and new attr,
+ * and return new xpath with the correct pattern of !!specific!! attribute for the element.
+ */
 function GetXpathWithAttribute(xpath, elm, attribute){
     if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != ""){
         if (xpath.indexOf("[") == -1){
@@ -61,15 +80,76 @@ function GetXpathWithAttribute(xpath, elm, attribute){
     return xpath;
 }
 
+
+/**
+ * Function that  called when we have clicked on +/- button.
+ * we have to change the blue outline and the text in textarea.
+ */
 function UpdateXpathTextAndClass(){
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
     $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
     $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+    ChangeContentDropdown(currentXpath);
 }
 
 
+/**
+ * Function that gets attr(can be text()/@class/@id/ or anything else.
+ * and return the full xpath string for python to work with.
+ */
+function GetContent(attr){
+    var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
+    return currentXpath + "/" + attr;
+}
 
+
+/**
+ * Function that gets xpath string , and return list of attributes
+ * of the last element in the string.
+ */
+
+// TODO: maybe i can send to the function the last element instand?
+function GetAttributesOfLast(xpath){
+    var indexOfLastSlash = xpath.lastIndexOf("/");
+    var lastElm = xpath.slice(indexOfLastSlash, xpath.length - 1);
+    return GetAttributes(lastElm);
+}
+
+/**
+ * Function that gets element as a string , and return list of attributes it has.
+ */
+function GetAttributes(elm){
+    var attrs = [];
+    var i = 0;
+    //this part return an array of arrays of [atts, value]:
+//    while (elm.indexOf("@") != -1 && i < 5){
+//        var attr = elm.slice(elm.indexOf("@"), elm.indexOf("="));
+//        var attrContent = elm.slice(elm.indexOf("'") + 1, elm.indexOf("'",elm.indexOf("='") + 2));
+//        attrs.push([attr, attrContent]);
+//        elm = elm.replace(elm.slice(elm.indexOf("@"), elm.indexOf("'", elm.indexOf("='") + 2) + 1), "");
+//    }
+//    return attrs;
+    while (elm.indexOf("@") != -1 && i < 5){
+        var attr = elm.slice(elm.indexOf("@"), elm.indexOf("="));
+        attrs.push(attr);
+        elm = elm.replace(elm.slice(elm.indexOf("@"), elm.indexOf("'", elm.indexOf("='") + 2) + 1), "");
+    }
+    return attrs;
+}
+
+function ChangeContentDropdown(currentXpath){
+    $("#content").append($('<option>', {
+        value: "/text()",
+        text : "/text()"
+    }));
+    $.each(GetAttributesOfLast(currentXpath), function(index, value){
+        $("#content").append($('<option>', {
+            value: "/" + value,
+            text : "/" + value
+        }));
+    });
+}
 $(document).ready(function(){
 	var DataToDB = {};
 	var pageType = "thread";
@@ -162,33 +242,34 @@ $(document).ready(function(){
         });
     });
 
-	//ENTER event handle
-		$(document).keypress(function(e) {
-			if(e.which == 13 && quest_counter < currentQuest.length) {
-				DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements); //TODO: check if that works
-                SelectedList = ListOfElements;
-                SelectedStart = indexOfStart;
-                SelectedEnd = indexOfEnd;
-                var currentXpath = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
+    //ENTER event handle
+    $(document).keypress(function(e) {
+        if(e.which == 13 && quest_counter < currentQuest.length) {
+            DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements); //TODO: check if that works
+            SelectedList = ListOfElements;
+            SelectedStart = indexOfStart;
+            SelectedEnd = indexOfEnd;
+            var currentXpath = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
 
-                $("#controls").remove();
-                $("#output_DataToDB_list").append(currentQuest[quest_counter] + ":<textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br>" +
-                    "<div id='controls'>Start:<input id='plusStart' type='button' value='+' />" +
-                    "<input id='minusStart' type='button' value='-' /><br><br>End:<input id='plusEnd' type='button' value='+' />" +
-                    "<input id='minusEnd' type='button' value='-'/><br>" +
-                    "<select id='xpathFunctions' style='display: none;'></select>");
+            $("#controls").remove();
+            $("#output_DataToDB_list").append(currentQuest[quest_counter] + ":<textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br>" +
+                "<div id='controls'><div id='err'></div><div id='buttons'>Start:<input id='plusStart' type='button' value='+' />" +
+                "<input id='minusStart' type='button' value='-' /><br>EEnd:<input id='plusEnd' type='button' value='+' />" +
+                "<input id='minusEnd' type='button' value='-'/><br></div>" +
+                "<div id='changes'><select id='xpathFunctions' style='display: none;'></select>" +
+                "output:<select id='content'></select></div></div>");
 
-
-                $('#text_' + currentQuest[quest_counter]).val(currentXpath);
-                $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
-                $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
-                if(quest_counter == currentQuest.length - 1){
-                    $("#output_DataToDB").append("<input type='button' id='update_DataToDB_button' value='Save!'>");
-                }
-				quest_counter++;
-                $("#quest").text(currentQuest[quest_counter]);
-			}
-	});
+            ChangeContentDropdown(currentXpath);
+            $('#text_' + currentQuest[quest_counter]).val(currentXpath);
+            $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+            $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
+            if(quest_counter == currentQuest.length - 1){
+                $("#output_DataToDB").append("<input type='button' id='update_DataToDB_button' value='Save!'>");
+            }
+            quest_counter++;
+            $("#quest").text(currentQuest[quest_counter]);
+        }
+    });
     //All the events for the +/- for the xpath
     $("#output_DataToDB").on("click", "#plusStart", function(){
         SelectedStart--;
@@ -216,7 +297,7 @@ $(document).ready(function(){
         $("#xpathFunctions").empty();
         var temp = this.value.slice(this.selectionStart, this.selectionEnd);
         if(temp.indexOf("=") == -1 || temp[temp.length - 1] != "'" || temp[0] != "@"){
-            alert("The selection isn't valid, Exmple:@id='post_id_'")
+            $("#err").html("<font color=red>The selection isn't valid, Example:@id='post_id_'</font>")
         }else{
             var equalsIndex = temp.indexOf("=");
             var attribute = temp.slice(0, equalsIndex);
@@ -231,6 +312,7 @@ $(document).ready(function(){
             });
             $("#xpathFunctions").show();
             SelectedTextArea = this;
+            $("#err").empty();
         }
 
 
@@ -238,6 +320,13 @@ $(document).ready(function(){
     $("#output_DataToDB").on("change", "#xpathFunctions", function(){
         SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
     });
+
+    $("#output_DataToDB").on("change", "#content", function(){
+        //SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
+        alert("should be append somehow, and if changed again, append instand of the last one. noob");
+    });
+
+
     //Event handler for hover:
     $('#output_view').mouseover(function (evt) {
         GenerateList(evt.target);
