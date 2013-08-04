@@ -215,20 +215,24 @@ $(document).ready(function(){
         indexOfSelectionEnd = this.selectionEnd;
         $("#xpathFunctions").empty();
         var temp = this.value.slice(this.selectionStart, this.selectionEnd);
-        var equalsIndex = temp.indexOf("=");
-        var attribute = temp.slice(0, equalsIndex);
-        var valueOfAttr = temp.slice(equalsIndex + 1, temp.length);
-        var replacement = "(" + attribute + ", " + valueOfAttr + ")";
-        var listOfFunction = ["starts-with", "ends-with", "contains"];
-        $.each(listOfFunction, function(index, value){
-            $("#xpathFunctions").append($('<option>', {
-                value: value + replacement,
-                text : value + replacement
-            }));
-        });
-        $("#xpathFunctions").show();
-        SelectedTextArea = this;
-        //this.value = this.value.slice(0, this.selectionStart) + replacement + this.value.slice(this.selectionEnd, this.value.length);
+        if(temp.indexOf("=") == -1 || temp[temp.length - 1] != "'" || temp[0] != "@"){
+            alert("The selection isn't valid, Exmple:@id='post_id_'")
+        }else{
+            var equalsIndex = temp.indexOf("=");
+            var attribute = temp.slice(0, equalsIndex);
+            var valueOfAttr = temp.slice(equalsIndex + 1, temp.length);
+            var replacement = "(" + attribute + ", " + valueOfAttr + ")";
+            var listOfFunction = ["starts-with", "ends-with", "contains"];
+            $.each(listOfFunction, function(index, value){
+                $("#xpathFunctions").append($('<option>', {
+                    value: value + replacement,
+                    text : value + replacement
+                }));
+            });
+            $("#xpathFunctions").show();
+            SelectedTextArea = this;
+        }
+
 
     });
     $("#output_DataToDB").on("change", "#xpathFunctions", function(){
