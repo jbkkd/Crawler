@@ -22,10 +22,10 @@ def build_page():
         baseHTML = request.json["newURL"]
         return "newURL"
     elif request.json is not None and "site_link" in request.json.keys():  # User sending DataToDB
-        a = XPathsHandler(request.json["site_link"])
+        DBHandler = XPathsHandler(request.json["site_link"])
         new_data = request.json
         del new_data["site_link"]
-        a.save_xpaths(request.json["page_type"], new_data)
+        DBHandler.save_xpaths(request.json["page_type"], new_data)
         return "Tnx for the data. We WILL use it!"
     else:
         baseHTML = 'http://forums.macrumors.com/showthread.php?t=1611153'

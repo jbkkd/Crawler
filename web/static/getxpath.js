@@ -87,7 +87,7 @@ function GetXpathWithAttribute(xpath, elm, attribute){
  */
 function UpdateXpathTextAndClass(){
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
-    $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
+    $('#text_' + currentQuest[quest_counter-1]).val(currentXpath + $("#content_" + currentQuest[quest_counter-1]).val());
     $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
     $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
     ChangeContentDropdown(currentXpath);
@@ -138,13 +138,13 @@ function GetAttributes(elm){
     return attrs;
 }
 
-function ChangeContentDropdown(currentXpath){
-    $("#content").append($('<option>', {
+function ChangeContentDropdown(currentXpath, textboxID){
+    $("#content_" + textboxID).append($('<option>', {
         value: "/text()",
         text : "/text()"
     }));
     $.each(GetAttributesOfLast(currentXpath), function(index, value){
-        $("#content").append($('<option>', {
+        $("#content_" + textboxID).append($('<option>', {
             value: "/" + value,
             text : "/" + value
         }));
@@ -245,7 +245,7 @@ $(document).ready(function(){
     //ENTER event handle
     $(document).keypress(function(e) {
         if(e.which == 13 && quest_counter < currentQuest.length) {
-            DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements); //TODO: check if that works
+            DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
             SelectedList = ListOfElements;
             SelectedStart = indexOfStart;
             SelectedEnd = indexOfEnd;
@@ -257,10 +257,10 @@ $(document).ready(function(){
                 "<input id='minusStart' type='button' value='-' /><br>EEnd:<input id='plusEnd' type='button' value='+' />" +
                 "<input id='minusEnd' type='button' value='-'/><br></div>" +
                 "<div id='changes'><select id='xpathFunctions' style='display: none;'></select>" +
-                "output:<select id='content'></select></div></div>");
+                "output:<select id='content_" + currentQuest[quest_counter] + "'></select></div></div>");
 
-            ChangeContentDropdown(currentXpath);
-            $('#text_' + currentQuest[quest_counter]).val(currentXpath);
+            ChangeContentDropdown(currentXpath, currentQuest[quest_counter]);
+            $('#text_' + currentQuest[quest_counter]).val(currentXpath + "/text()");
             $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
             $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
             if(quest_counter == currentQuest.length - 1){
@@ -318,12 +318,20 @@ $(document).ready(function(){
 
     });
     $("#output_DataToDB").on("change", "#xpathFunctions", function(){
-        SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
+        if(this.value != ""){
+            SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
+        }
     });
 
-    $("#output_DataToDB").on("change", "#content", function(){
+    $("#output_DataToDB").on("change", "[id^=content]", function(){
         //SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
-        alert("should be append somehow, and if changed again, append instand of the last one. noob");
+        var IDOfThis = this.id.slice(8, this.id.length);
+        var n = $("#text_" + IDOfThis).val().lastIndexOf("/");
+        var prevWord = $("#text_" + IDOfThis).val().slice(n, $("#text_" + IDOfThis).val().length);
+        if(prevWord.indexOf("/@") == 0 || prevWord.indexOf("/text()") == 0){
+            $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val().replace(prevWord, this.value));
+        }
+        console.log(prevWord);
     });
 
 
