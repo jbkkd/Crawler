@@ -3,7 +3,7 @@
 <head>
     <title>GetURLs</title>
     <script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
-    <link href="{{ get_url('static', filename='GetURLs.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ get_url('static', filename='geturl.css') }}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="div_of_urls">
@@ -13,7 +13,7 @@
             <th>Data added</th>
             <th>Action</th>
         </tr>
-        %for i in list_urls:
+        %for i in range(10):
         <tr>
             <td>{{i}}</td>
             <td>22222</td>

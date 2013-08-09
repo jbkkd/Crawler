@@ -2,6 +2,7 @@ __author__ = 'LaptOmer'
 from DBBaseClass import BaseDB
 from datetime import datetime
 
+
 class XPathAdapter(BaseDB):
     def __init__(self):
         super(XPathAdapter, self).__init__()
@@ -12,4 +13,4 @@ class XPathAdapter(BaseDB):
         self.xpath_collection.insert(url_entry)
 
     def get_xpath_for_site(self, site_main_url, page_type):
-        return self.xpath_collection.find_one({'site_main_url': site_main_url, 'page_type': page_type})
+        return self.xpath_collection.find({'site_main_url': site_main_url, 'page_type': page_type})

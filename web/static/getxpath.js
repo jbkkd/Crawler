@@ -26,8 +26,6 @@ function GetXpathString(start, end, list){
         tempXpath += list[i] + "/";
     }
     tempXpath = tempXpath.slice(0, tempXpath.length-1);
-
-
     return tempXpath;
 }
 

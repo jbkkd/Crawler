@@ -7,13 +7,13 @@ from scrapper.items import Post, Thread
 from XPaths.XPaths import XPathsHandler
 
 
-class CrawlPosts(CrawlSpider):
-    name = "CrawlPosts"
+class CrawlPostsUsingMongo(CrawlSpider):
+    name = "CrawlPostsUsingMongo"
     allowed_domains = ["forums.macrumors.com"]
     start_urls = [
         "http://forums.macrumors.com/forumdisplay.php?f=43",
     ]
-
+    XPathAdapter.get_xpath_for_site()
     rules = [
         Rule(SgmlLinkExtractor(
                 allow=('showthread\.php', ),
@@ -32,6 +32,9 @@ class CrawlPosts(CrawlSpider):
             follow=True,
         ),
     ]
+
+    # dbHandler = XPathsHandler("forum.macrumors.com")
+
 
     def parse_posts(self, response):
         hxs = HtmlXPathSelector(response)
