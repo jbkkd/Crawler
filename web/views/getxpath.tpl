@@ -13,8 +13,8 @@
 <div id="output_DataToDB" class="float_menus">
     <u>Currently XPaths Data:</u><br>
     <select id="page_type">
-        <option>forum</option>
         <option>thread</option>
+        <option>forum</option>
     </select>
 <div id="output_DataToDB_list"></div>
 </div>

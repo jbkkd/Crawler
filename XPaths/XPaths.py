@@ -15,3 +15,6 @@ class XPathsHandler(object):
         for xpath_key in xpaths:
             xpath_value = xpaths[xpath_key]
             self.xpath_adapter.save_xpath(self.site_main_url, page_type, xpath_key, xpath_value)
+
+    def get_xpath_for_site(self, page_type):
+        self.xpath_adapter.get_xpath_for_site(self.site_main_url, page_type)

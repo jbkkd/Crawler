@@ -13,7 +13,9 @@ class CrawlPostsUsingMongo(CrawlSpider):
     start_urls = [
         "http://forums.macrumors.com/forumdisplay.php?f=43",
     ]
-    XPathAdapter.get_xpath_for_site()
+    Handler = XPathsHandler("forums.macrumors.com")  # TODO: is that the current site_name?
+    XP = Handler.get_xpath_for_site("Thread")
+
     rules = [
         Rule(SgmlLinkExtractor(
                 allow=('showthread\.php', ),

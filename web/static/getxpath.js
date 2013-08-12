@@ -66,7 +66,7 @@ function GetXpathOfElement(elm){
  * and return new xpath with the correct pattern of !!specific!! attribute for the element.
  */
 function GetXpathWithAttribute(xpath, elm, attribute){
-    if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != ""){
+    if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != "" && elm.attributes[attribute].value.indexOf("selectedXpathHighLight") == -1){
         if (xpath.indexOf("[") == -1){
             xpath += "[";
         }
@@ -83,6 +83,7 @@ function GetXpathWithAttribute(xpath, elm, attribute){
  * Function that  called when we have clicked on +/- button.
  * we have to change the blue outline and the text in textarea.
  */
+// TODO: when select selement with blue highlight its get fucked up@!@!@
 function UpdateXpathTextAndClass(){
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath + $("#content_" + currentQuest[quest_counter-1]).val());
@@ -93,25 +94,16 @@ function UpdateXpathTextAndClass(){
 
 
 /**
- * Function that gets attr(can be text()/@class/@id/ or anything else.
- * and return the full xpath string for python to work with.
- */
-function GetContent(attr){
-    var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
-    return currentXpath + "/" + attr;
-}
-
-
-/**
  * Function that gets xpath string , and return list of attributes
  * of the last element in the string.
  */
-
-// TODO: maybe i can send to the function the last element instand?
 function GetAttributesOfLast(xpath){
-    var indexOfLastSlash = xpath.lastIndexOf("/");
-    var lastElm = xpath.slice(indexOfLastSlash, xpath.length - 1);
-    return GetAttributes(lastElm);
+    var temp = null;
+    if($("#output_view").xpath(xpath)){ // TODO: FIX ITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+        temp = $("#output_view").xpath(xpath)[0].attributes;
+    }
+
+    return temp;
 }
 
 /**
@@ -143,45 +135,44 @@ function ChangeContentDropdown(currentXpath, textboxID){
     }));
     $.each(GetAttributesOfLast(currentXpath), function(index, value){
         $("#content_" + textboxID).append($('<option>', {
-            value: "/" + value,
-            text : "/" + value
+            value: "/@" + value.name,
+            text : "/@" + value.name
         }));
     });
 }
 $(document).ready(function(){
-	var DataToDB = {};
-	var pageType = "thread";
+    var DataToDB = {};
+    var pageType = "thread";
 
     // TODO: make a python(via AJAX) function to get site_link/page_link/page_number
-	var threadQuest = [
-		'site_link',
-		'page_link',
-		'htmlelement_that_wraps_a_post',
-		'forum_name',
-		'forum_version',
-		'post_title',
-		'post_data',
-		'poster_username',
-		'thread_title',
-		'page_number'
-	];
+    var threadQuest = [
+        'site_link',
+        'page_link',
+        'htmlelement_that_wraps_a_post',
+        'forum_name',
+        'forum_version',
+        'post_title',
+        'post_data',
+        'poster_username',
+        'thread_title',
+        'page_number'
+    ];
 
-	var forumQuest = [
-		'site_link',
-		'thread_link',
-		'htmlelement_that_wraps_a_thread',
-		'thread_titles',
-		'forum_name',
-		'thread_replies',
-		'thread_views',
-		'thread_Starter',
-		'thread_last_post_date',
-		'page_number',
-		'thread_ratings'
-	];
-   	//Init the type of the page:
+    var forumQuest = [
+        'site_link',
+        'thread_link',
+        'htmlelement_that_wraps_a_thread',
+        'thread_titles',
+        'forum_name',
+        'thread_replies',
+        'thread_views',
+        'thread_Starter',
+        'thread_last_post_date',
+        'page_number',
+        'thread_ratings'
+    ];
+    //Init the type of the page:
     currentQuest = threadQuest;
-
     $("#page_type").change(function(){
         quest_counter = 0;
         pageType = $(this).val();
@@ -194,10 +185,10 @@ $(document).ready(function(){
         $("#update_DataToDB_button").remove();
         $("#quest").text(currentQuest[0]);
     });
-	//Draggable by UI Jquery lib!
+    //Draggable by UI Jquery lib!
     $(".float_menus").draggable();
 
-	//AJAX sending request to mainroute.py
+    //AJAX sending request to mainroute.py
     $.ajax({
         url: "/a",
         type: "POST",
@@ -206,8 +197,8 @@ $(document).ready(function(){
         }
     });
 
-	//Init the output_code:
-	$("#quest").text(currentQuest[quest_counter]);
+    //Init the output_code:
+    $("#quest").text(currentQuest[quest_counter]);
 
     //Event handle for update_DataToDB button
     $('#output_DataToDB').on("click", "#update_DataToDB_button", function(){
@@ -243,7 +234,7 @@ $(document).ready(function(){
     //ENTER event handle
     $(document).keypress(function(e) {
         if(e.which == 13 && quest_counter < currentQuest.length) {
-            DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
+            DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);// TODO: Not sopose to be in the save event?
             SelectedList = ListOfElements;
             SelectedStart = indexOfStart;
             SelectedEnd = indexOfEnd;
@@ -339,8 +330,8 @@ $(document).ready(function(){
         indexOfEnd = ListOfElements.length - 1;
         hoverXpath = GetXpathString(indexOfStart,indexOfEnd, ListOfElements);
 
-            $(evt.target).addClass("elmHover");
-            $('#selected_xpath').html(hoverXpath);
+        $(evt.target).addClass("elmHover");
+        $('#selected_xpath').html(hoverXpath);
 
     }).mouseout(function(evt){
             $(evt.target).removeClass("elmHover");
@@ -350,16 +341,16 @@ $(document).ready(function(){
         });
 
 
-	//Scrolling the output_code div to my view
-	$(window).scroll(function () {
+    //Scrolling the output_code div to my view
+    $(window).scroll(function () {
         var set1 = $(document).scrollTop();
-		var p = $("#output_code").position();
-		if((set1 - p.top > 150)||(set1 - p.top < -700)){
-			$('#output_code').animate({top:set1 + "px"},{duration:500,queue:false});
-		}
+        var p = $("#output_code").position();
+        if((set1 - p.top > 150)||(set1 - p.top < -700)){
+            $('#output_code').animate({top:set1 + "px"},{duration:500,queue:false});
+        }
         var p2 = $("#output_DataToDB").position();
         if((set1 - p2.top > 150)||(set1 - p2.top < -700)){
             $('#output_DataToDB').animate({top:set1 + "px"},{duration:500,queue:false});
         }
-	});
+    });
 });
