@@ -14,6 +14,10 @@ class CrawlPosts(CrawlSpider):
         "http://forums.macrumors.com/forumdisplay.php?f=43",
     ]
 
+    posts_xpaths = {
+        'all_the_posts': ''
+    }
+
     rules = [
         Rule(SgmlLinkExtractor(
                 allow=('showthread\.php', ),

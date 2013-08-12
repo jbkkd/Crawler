@@ -9,6 +9,7 @@ var hoverXpath = "";
 var SelectedList;  //List of tags of the selected element
 var SelectedStart;
 var SelectedEnd;
+var CurrentMouseTarget;
 
 //vars that maybe we should put in class:(anyway - its not the way to pass the information)
 var indexOfSelectionStart, indexOfSelectionEnd;
@@ -66,7 +67,7 @@ function GetXpathOfElement(elm){
  * and return new xpath with the correct pattern of !!specific!! attribute for the element.
  */
 function GetXpathWithAttribute(xpath, elm, attribute){
-    if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != "" && elm.attributes[attribute].value.indexOf("selectedXpathHighLight") == -1){
+        if (elm.hasAttribute(attribute) && elm.attributes[attribute].value != ""){
         if (xpath.indexOf("[") == -1){
             xpath += "[";
         }
@@ -232,8 +233,11 @@ $(document).ready(function(){
     });
 
     //ENTER event handle
-    $(document).keypress(function(e) {
-        if(e.which == 13 && quest_counter < currentQuest.length) {
+    $(document).keypress(function(evt) {
+        if(evt.which == 13 && quest_counter < currentQuest.length) {
+            $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
+            $(".elmHover").removeClass("elmHover");
+            GenerateList(CurrentMouseTarget);
             DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);// TODO: Not sopose to be in the save event?
             SelectedList = ListOfElements;
             SelectedStart = indexOfStart;
@@ -250,7 +254,6 @@ $(document).ready(function(){
 
             ChangeContentDropdown(currentXpath, currentQuest[quest_counter]);
             $('#text_' + currentQuest[quest_counter]).val(currentXpath + "/text()");
-            $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
             $("#output_view").xpath(currentXpath).addClass("selectedXpathHighLight");
             if(quest_counter == currentQuest.length - 1){
                 $("#output_DataToDB").append("<input type='button' id='update_DataToDB_button' value='Save!'>");
@@ -327,6 +330,7 @@ $(document).ready(function(){
     //Event handler for hover:
     $('#output_view').mouseover(function (evt) {
         GenerateList(evt.target);
+        CurrentMouseTarget = evt.target;
         indexOfEnd = ListOfElements.length - 1;
         hoverXpath = GetXpathString(indexOfStart,indexOfEnd, ListOfElements);
 

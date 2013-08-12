@@ -1,3 +1,5 @@
+from urlparse import urlparse
+
 __author__ = 'LaptOmer'
 
 from DB.XPathAdapter import *
@@ -5,9 +7,10 @@ from Urls.Urls import *
 
 
 class XPathsHandler(object):
-    def __init__(self, site_main_url):
+    def __init__(self, site_url):
         self.xpath_adapter = XPathAdapter()
-        self.site_main_url = site_main_url
+        parsed_url = urlparse(site_url)
+        self.site_main_url = parsed_url.netloc
 
     def save_xpaths(self, page_type, xpaths):
         urls_handler = UrlsHandler()

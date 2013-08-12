@@ -1,6 +1,7 @@
 __author__ = 'LaptOmer'
 from pymongo import MongoClient
 
+
 class BaseDB(object):
     def __init__(self):
         self.db_name = "XpathCrawler"
