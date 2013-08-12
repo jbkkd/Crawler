@@ -323,7 +323,6 @@ $(document).ready(function(){
         if(prevWord.indexOf("/@") == 0 || prevWord.indexOf("/text()") == 0){
             $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val().replace(prevWord, this.value));
         }
-        console.log(prevWord);
     });
 
 
