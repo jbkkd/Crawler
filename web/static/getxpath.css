@@ -17,6 +17,7 @@
 	text-align: center;
     z-index: 10000;
     overflow:auto;
+    word-break: break-all;
 }
 .elmHover{
     outline: 2px solid #de0002;
