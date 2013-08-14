@@ -43,9 +43,9 @@ def build_page():
         e.extract()
     return str(page)
 
-@route('/static/<filename>', name='static')
-def send_static(filename):
-    return static_file(filename, root='static')
+@route('/static/:path#.+#', name='static')
+def static(path):
+    return static_file(path, root='static')
 
 
 @route('/getxpath')

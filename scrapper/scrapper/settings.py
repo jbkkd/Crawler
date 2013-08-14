@@ -8,12 +8,16 @@
 
 BOT_NAME = 'scrapper'
 
-SPIDER_MODULES = ['scrapper.spiders']
-NEWSPIDER_MODULE = 'scrapper.spiders'
+SPIDER_MODULES = ['scrapper.scrapper.spiders']
+NEWSPIDER_MODULE = 'scrapper.scrapper.spiders'
 
 ITEM_PIPELINES = [
   'scrapy_mongodb.MongoDBPipeline',
 ]
+
+INSTALLED_APPS = (
+	'Crawler',
+)
 
 MONGODB_URI = 'mongodb://localhost:27017'
 MONGODB_DATABASE = 'scrapy'

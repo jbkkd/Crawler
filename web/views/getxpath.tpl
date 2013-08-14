@@ -2,11 +2,14 @@
 <html>
 <head>
     <title>Get XPath</title>
-    <script src="{{ get_url('static', filename='jquery-1.9.1.js') }}" type="text/javascript"></script>
-    <script src="{{ get_url('static', filename='jquery-ui-1.10.3.custom.js') }}" type="text/javascript"></script>
-	<script src="{{ get_url('static', filename='getxpath.js') }}" type="text/javascript"></script>
-	<link href="{{ get_url('static', filename='getxpath.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ get_url('static', filename='jquery.xpath.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/jquery-1.9.1.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/jquery-ui-1.10.3.custom.js') }}" type="text/javascript"></script>
+	<script src="{{ get_url('static', path='scripts/getxpath.js') }}" type="text/javascript"></script>
+	<link href="{{ get_url('static', path='styles/getxpath.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ get_url('static', path='scripts/jquery.xpath.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/highlighting.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/binds.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/makexpath.js') }}" type="text/javascript"></script>
 </head>
 <body>
 <div id="output_DataToDB" class="float_menus">

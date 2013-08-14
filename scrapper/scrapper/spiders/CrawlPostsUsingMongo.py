@@ -3,8 +3,8 @@ __author__ = 'LaptOmer'
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
-from scrapper.items import Post, Thread
-from XPaths.XPaths import XPathsHandler
+from Crawler.scrapper.scrapper.items import Post, Thread
+# from XPaths.XPathsss import XPathsHandler
 
 
 class CrawlPostsUsingMongo(CrawlSpider):
@@ -13,8 +13,6 @@ class CrawlPostsUsingMongo(CrawlSpider):
     start_urls = [
         "http://forums.macrumors.com/forumdisplay.php?f=43",
     ]
-    Handler = XPathsHandler("forums.macrumors.com")  # TODO: is that the current site_name?
-    XP = Handler.get_xpath_for_site("Thread")
 
     rules = [
         Rule(SgmlLinkExtractor(
@@ -35,28 +33,36 @@ class CrawlPostsUsingMongo(CrawlSpider):
         ),
     ]
 
-    # dbHandler = XPathsHandler("forum.macrumors.com")
-
 
     def parse_posts(self, response):
         hxs = HtmlXPathSelector(response)
 
+        Handler = XPathsHandler("forums.macrumors.com")  # TODO: is that the current site_name?
+        XP = Handler.get_xpath_for_site("Thread")
+
         page_number = self.get_qs_numeric_value(response.url, "page")
         thread_id = self.get_qs_numeric_value(response.url, "t")
 
-        all_the_posts = hxs.select('//*[@id="posts"]/div')
+        all_the_posts = hxs.select(XP["htmlelement_that_wraps_a_post"])
         posts = []
         for post_div in all_the_posts:
             if post_div.select('./@id') == 'lastpost':
                 continue
             post = Post()
-            post['title'] = post_div.select(".//td[@class='alt1']/div[@class='smallfont']/strong").extract()
-            post['content'] = post_div.select(".//div[starts-with(@id, 'post_message')]/text()").extract()
-            post['username'] = post_div.select(".//a[@class='bigusername']/text()").extract()
+            # post['title'] = post_div.select(".//td[@class='alt1']/div[@class='smallfont']/strong").extract()
+            # post['content'] = post_div.select(".//div[starts-with(@id, 'post_message')]/text()").extract()
+            # post['username'] = post_div.select(".//a[@class='bigusername']/text()").extract()
+            # post['id'] = post_div.select(".//table[@class='tborder']/@id").re("\d+")
+            # post['page_number'] = page_number
+            # post['thread_id'] = thread_id
+            # post['date'] = ""
+            post['title'] = post_div.select("." + XP["post_title"]).extract()
+            post['content'] = post_div.select("." + XP["post_data"]).extract()
+            post['username'] = post_div.select("." + XP["poster_username"]).extract()
             post['id'] = post_div.select(".//table[@class='tborder']/@id").re("\d+")
             post['page_number'] = page_number
             post['thread_id'] = thread_id
-            post['date'] = ""
+            post['date'] = post_div.select("." + XP["post_data"]).extract()
             posts.append(post)
 
         return posts
