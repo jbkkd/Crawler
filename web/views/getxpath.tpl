@@ -10,6 +10,10 @@
     <script src="{{ get_url('static', path='scripts/highlighting.js') }}" type="text/javascript"></script>
     <script src="{{ get_url('static', path='scripts/binds.js') }}" type="text/javascript"></script>
     <script src="{{ get_url('static', path='scripts/makexpath.js') }}" type="text/javascript"></script>
+    <script src="{{ get_url('static', path='scripts/qunit-1.12.0.js') }}" type="text/javascript"></script>
+	<link href="{{ get_url('static', path='styles/qunit-1.12.0.css') }}" rel="stylesheet" type="text/css" />
+
+
 </head>
 <body>
 <div id="output_DataToDB" class="float_menus">
@@ -30,4 +34,7 @@
 </div>
 <div id="output_view"></div>
 </body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="{{ get_url('static', path='scripts/tests.js') }}" type="text/javascript"></script>
 </html>

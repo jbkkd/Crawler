@@ -51,11 +51,15 @@ var forumQuest = [
  * Function that called when we have clicked on +/- button.
  * we have to change the blue outline and the text in textarea.
  */
-function UpdateAfterXPathChanged(){ //TODO: Idont think that fucnkign should looks/called like that
+function UpdateAfterXPathChanged(){ //TODO: Idont think that function should looks/called like that
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath + $("#content_" + currentQuest[quest_counter-1]).val());
     BindChangeContentDropdown(currentXpath);
     HighlightSelectedXpath(currentXpath);
+}
+
+function HelloWorld(h, w){
+    return h + " " + w;
 }
 
 
