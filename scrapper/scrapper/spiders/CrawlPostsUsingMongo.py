@@ -13,6 +13,14 @@ from XPaths.XPaths import XPathsHandler
 
 class CrawlPostsUsingMongo(CrawlSpider):
     name = "CrawlPostsUsingMongo"
+    XP = {}
+
+    Handler = XPathsHandler("http://macrumors.com")  # TODO: is that the current site_name?
+    XPPPP = Handler.get_xpath_for_site("thread")
+
+    for xpath in XPPPP:
+        XP[xpath['key']] = xpath['xpath']
+
     allowed_domains = ["forums.macrumors.com"]
     start_urls = [
         "http://forums.macrumors.com/forumdisplay.php?f=43",
@@ -40,13 +48,9 @@ class CrawlPostsUsingMongo(CrawlSpider):
     def parse_posts(self, response):
         hxs = HtmlXPathSelector(response)
 
-        Handler = XPathsHandler("forums.macrumors.com")  # TODO: is that the current site_name?
-        XP = Handler.get_xpath_for_site("Thread")
-
         page_number = self.get_qs_numeric_value(response.url, "page")
         thread_id = self.get_qs_numeric_value(response.url, "t")
-
-        all_the_posts = hxs.select(XP["htmlelement_that_wraps_a_post"])
+        all_the_posts = hxs.select(self.XP["htmlelement_that_wraps_a_post"])
         posts = []
         for post_div in all_the_posts:
             if post_div.select('./@id') == 'lastpost':
@@ -59,13 +63,13 @@ class CrawlPostsUsingMongo(CrawlSpider):
             # post['page_number'] = page_number
             # post['thread_id'] = thread_id
             # post['date'] = ""
-            post['title'] = post_div.select("." + XP["post_title"]).extract()
-            post['content'] = post_div.select("." + XP["post_data"]).extract()
-            post['username'] = post_div.select("." + XP["poster_username"]).extract()
+            post['title'] = post_div.select("." + self.XP["post_title"]).extract()
+            post['content'] = post_div.select("." + self.XP["post_data"]).extract()
+            post['username'] = post_div.select("." + self.XP["poster_username"]).extract()
             post['id'] = post_div.select(".//table[@class='tborder']/@id").re("\d+")
             post['page_number'] = page_number
             post['thread_id'] = thread_id
-            post['date'] = post_div.select("." + XP["post_data"]).extract()
+            post['date'] = post_div.select("." + self.XP["post_data"]).extract()
             posts.append(post)
 
         return posts

@@ -17,8 +17,8 @@ ITEM_PIPELINES = [
 
 
 MONGODB_URI = 'mongodb://localhost:27017'
-MONGODB_DATABASE = 'scrapy'
-MONGODB_COLLECTION = 'my_items'
+MONGODB_DATABASE = 'XpathCrawler'
+MONGODB_COLLECTION = 'my_items_collection'
 MONGODB_ADD_TIMESTAMP = True
 
 

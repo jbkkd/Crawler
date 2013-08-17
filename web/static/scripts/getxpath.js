@@ -26,10 +26,12 @@ var threadQuest = [
     'forum_name',
     'forum_version',
     'post_title',
-    'post_data',
+    'post_content',
+    'post_date',
     'poster_username',
     'thread_title',
-    'page_number'
+    'page_number',
+    'post_id'
 ];
 
 var forumQuest = [
@@ -54,7 +56,7 @@ var forumQuest = [
 function UpdateAfterXPathChanged(){ //TODO: Idont think that function should looks/called like that
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath + $("#content_" + currentQuest[quest_counter-1]).val());
-    BindChangeContentDropdown(currentXpath);
+    BindChangeContentDropdown(currentXpath, currentQuest[quest_counter-1]);
     HighlightSelectedXpath(currentXpath);
 }
 

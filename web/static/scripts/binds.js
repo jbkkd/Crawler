@@ -23,12 +23,16 @@ function BindChangeAttributeOfLastElement() { //TODO: Should i replace the .call
     var IDOfThis = this.id.slice(8, this.id.length);
     var n = $("#text_" + IDOfThis).val().lastIndexOf("/");
     var prevWord = $("#text_" + IDOfThis).val().slice(n, $("#text_" + IDOfThis).val().length);
+
     if (prevWord.indexOf("/@") == 0 || prevWord.indexOf("/text()") == 0) {
         $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val().replace(prevWord, this.value));
+    }  else {
+        $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val() + (this.value));
     }
 }
 
 function BindChangeContentDropdown(currentXpath, textboxID){
+    $("#content_" + textboxID).empty();
     $("#content_" + textboxID).append($('<option>', {
             value: "",
             text : ""
@@ -67,6 +71,8 @@ function BindChangePageType() {
     $("#update_DataToDB_button").remove();
     $("#quest").text(currentQuest[0]);
 }
+
+
 //All the events for the +/- for the xpath
 function BindPlusMinusButtons() {
     $("#output_DataToDB").on("click", "#plusStart", function () {
