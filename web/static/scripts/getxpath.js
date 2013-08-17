@@ -195,7 +195,6 @@ $(document).ready(function(){
     });
 
 
-
     //Event handler for hover:
     $('#output_view').mouseover(function (evt) {
         BindMouseHoverElement(evt);
