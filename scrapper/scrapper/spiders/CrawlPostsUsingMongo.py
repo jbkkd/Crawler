@@ -1,10 +1,14 @@
 __author__ = 'LaptOmer'
 
+import sys
+sys.path.append("C:\Users\LaptOmer\Code\Python\PythonBackend\Crawler")
+print sys.path
+
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import HtmlXPathSelector
-from Crawler.scrapper.scrapper.items import Post, Thread
-# from XPaths.XPathsss import XPathsHandler
+from scrapper.items import Post, Thread
+from XPaths.XPaths import XPathsHandler
 
 
 class CrawlPostsUsingMongo(CrawlSpider):
@@ -32,7 +36,6 @@ class CrawlPostsUsingMongo(CrawlSpider):
             follow=True,
         ),
     ]
-
 
     def parse_posts(self, response):
         hxs = HtmlXPathSelector(response)
