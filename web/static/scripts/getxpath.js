@@ -203,5 +203,5 @@ $(document).ready(function(){
         });
 
     //Scrolling the .float_menus div to my view
-    $(window).scroll(WindowsScrollHandler());
+    $(window).scroll(WindowsScrollHandler);
 });
