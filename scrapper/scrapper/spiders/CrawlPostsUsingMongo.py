@@ -1,8 +1,8 @@
 __author__ = 'LaptOmer'
 
 import sys
-sys.path.append("C:\Users\LaptOmer\Code\Python\PythonBackend\Crawler")
-print sys.path
+sys.path.append(sys.path[-1][0:sys.path[-1].rfind("Crawler") + 7])
+
 
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
