@@ -26,12 +26,10 @@ var threadQuest = [
     'forum_name',
     'forum_version',
     'post_title',
-    'post_content',
-    'post_date',
+    'post_data',
     'poster_username',
     'thread_title',
-    'page_number',
-    'post_id'
+    'page_number'
 ];
 
 var forumQuest = [
@@ -163,7 +161,7 @@ $(document).ready(function(){
             DataToDB[currentQuest[quest_counter]] = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);// TODO: Not sopose to be in the save event?
 
             $("#controls").remove();
-            $("#output_DataToDB_list").append(currentQuest[quest_counter] + ":<textarea rows='1' cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br>" +
+            $("#output_DataToDB_list").append(currentQuest[quest_counter] + ":<textarea cols='60' id='text_" + currentQuest[quest_counter] + "'/></textarea><br>" +
                 "<div id='controls'><div id='err'></div><div id='buttons'>Start:<input id='plusStart' type='button' value='+' />" +
                 "<input id='minusStart' type='button' value='-' /><br>EEnd:<input id='plusEnd' type='button' value='+' />" +
                 "<input id='minusEnd' type='button' value='-'/><br></div>" +
@@ -175,7 +173,9 @@ $(document).ready(function(){
             SelectedEnd = indexOfEnd;
             var currentXpath = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
             BindChangeContentDropdown(currentXpath, currentQuest[quest_counter]);
-            $('#text_' + currentQuest[quest_counter]).val(currentXpath + "/text()");
+            var textArea = $('textarea#text_' + currentQuest[quest_counter]);
+            textArea.val(currentXpath + "/text()");
+            textArea.height(textArea[0].scrollHeight);
             HighlightSelectedXpath(currentXpath);
             CheckIfUserFinishedInput();
             quest_counter++;
