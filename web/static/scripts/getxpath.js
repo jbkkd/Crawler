@@ -119,7 +119,7 @@ $(document).ready(function(){
         url: "/a",
         type: "POST",
         success: function(response){
-            $('#output_view').html(response);
+            $('#output_textboxs').html(response);
         }
     });
 
@@ -148,7 +148,7 @@ $(document).ready(function(){
             data: JSON.stringify({"newURL": $("#GetByURL_input").val()}),
             contentType: "application/json",
             success: function(response) {
-                $('#output_view').html(response);
+                $('#output_textboxs').html(response);
             }
         });
     });
@@ -198,7 +198,7 @@ $(document).ready(function(){
 
 
     //Event handler for hover:
-    $('#output_view').mouseover(function (evt) {
+    $('#output_textboxs').mouseover(function (evt) {
         BindMouseHoverElement(evt);
     }).mouseout(function(evt){
             RemoveHighLightClasses(false, evt.target);

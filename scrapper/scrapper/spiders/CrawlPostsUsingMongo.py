@@ -23,7 +23,7 @@ class CrawlPostsUsingMongo(CrawlSpider):
 
     allowed_domains = ["forums.macrumors.com"]
     start_urls = [
-        "http://forums.macrumors.com/forumdisplay.php?f=43",
+        "http://forums.macrumors.com/showthread.php?t=1624435",
     ]
 
     rules = [
@@ -33,7 +33,7 @@ class CrawlPostsUsingMongo(CrawlSpider):
                 restrict_xpaths=("//div[@class='pagenav']", "//*[contains(@id, 'threadbits_forum_')]"),
             ),
             callback='parse_posts',
-            follow=True,
+            follow=False,
         ),
         Rule(SgmlLinkExtractor(
                 allow=('forumdisplay\.php', ),
@@ -41,7 +41,7 @@ class CrawlPostsUsingMongo(CrawlSpider):
                 restrict_xpaths=("//div[@class='pagenav']", "//*[starts-with(@id, 'collapseobj_forumbit_')]"),
             ),
             callback='parse_threads',
-            follow=True,
+            follow=False,
         ),
     ]
 
@@ -95,7 +95,7 @@ class CrawlPostsUsingMongo(CrawlSpider):
         return threads
 
     def parse_start_url(self, response):
-        self.parse_threads(response)
+        self.parse_posts(response)
 
     def get_qs_numeric_value(self, url_string, template):
         template += "="

@@ -15,13 +15,13 @@ function GetXpathString(start, end, list){
 
 
 /**
- * Function that gets an element and start to scan all his parents up to "output_view".
+ * Function that gets an element and start to scan all his parents up to "output_textboxs".
  * the function changes the global var of ListOfElements - which is list of all the parents.
  */
 function GenerateList(elm) {
     var tempXpath = "";
     ListOfElements = [];
-    while (elm.id != "output_view") {
+    while (elm.id != "output_textboxs") {
         tempXpath = GetXpathOfElement(elm);
         ListOfElements.unshift(tempXpath);
         elm = elm.parentNode;
