@@ -25,7 +25,7 @@
     <div id="output_DataToDB_list"></div>
 </div>
 
-<div id="output_code" class="float_menus">
+<div id="output_code" class="float_menus" style="left: 1010px">
     Hey, please select the:
     <i><div id="quest"></div></i>
     and press <b>ENTER</b>
@@ -34,7 +34,7 @@
     <div id="GetByURL"><input id="GetByURL_input"><br><button id="GetByURL_button">Get Page By URL</button> </div>
 </div>
 
-<div id="output_view" class="float_menus">
+<div id="output_view" class="float_menus" style="left: 505px">
 
 </div>
 
@@ -42,5 +42,5 @@
 </body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
-<script src="{{ get_url('static', path='scripts/tests.js') }}" type="text/javascript"></script>
+<script src="{{ get_url('static', path='scripts/getxpath_tests.js') }}" type="text/javascript"></script>
 </html>

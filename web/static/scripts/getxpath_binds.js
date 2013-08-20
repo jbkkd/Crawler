@@ -24,28 +24,29 @@ function BindChangeAttributeOfLastElement() { //TODO: Should i replace the .call
     var n = $("#text_" + IDOfThis).val().lastIndexOf("/");
     var prevWord = $("#text_" + IDOfThis).val().slice(n, $("#text_" + IDOfThis).val().length);
 
-    if (prevWord.indexOf("/@") == 0 || prevWord.indexOf("/text()") == 0) {
+    if (prevWord.indexOf("/@") == 0 || prevWord.indexOf("//text()") == 0) {
         $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val().replace(prevWord, this.value));
     }  else {
         $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val() + (this.value));
     }
+    PrintXpathElementData($("#text_" + IDOfThis).val())
 }
 
 function BindChangeContentDropdown(currentXpath, textboxID){
     $("#content_" + textboxID).empty();
     $("#content_" + textboxID).append($('<option>', {
+            value: "//text()",
+            text : "//text()"
+        })).append($('<option>', {
             value: "",
             text : ""
-        })).append($('<option>', {
-            value: "/text()",
-            text : "/text()"
         }));
 
     $.each(GetAttributesOfLastElementInXPath(currentXpath), function(index, value){
-        $("#content_" + textboxID).append($('<option>', {
-            value: "/@" + value.name,
-            text : "/@" + value.name
-        }));
+            $("#content_" + textboxID).append($('<option>', {
+                value: "/@" + value.name,
+                text : "/@" + value.name
+            }));
     });
 }
 

@@ -68,5 +68,13 @@ function AddAttributesOfElementToXPath(xpath, elm, attribute){
  */
 function GetAttributesOfLastElementInXPath(xpath){
     var xpathResults = document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null);
-    return xpathResults.iterateNext().attributes;
+    resultAttributes = xpathResults.iterateNext().attributes;
+    tempkaze = [];
+    for (var i = 0; i < resultAttributes.length; i++)
+    {
+        if (resultAttributes[i].value != "selectedXpathHighLight") {
+            tempkaze.unshift(resultAttributes[i]);
+        }
+    }
+    return tempkaze;
 }

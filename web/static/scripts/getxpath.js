@@ -47,15 +47,28 @@ var forumQuest = [
 ];
 
 
+function PrintXpathElementData(currentXpath) {
+    var xpathsResults = $(document).xpath(currentXpath);
+    var outputView = $("#output_view");
+    outputView.empty();
+    xpathsResults.each(function (index) {
+        outputView.append(xpathsResults[index].nodeValue)
+    });
+}
+
 /**
  * Function that called when we have clicked on +/- button.
  * we have to change the blue outline and the text in textarea.
  */
 function UpdateAfterXPathChanged(){ //TODO: Idont think that function should looks/called like that
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
-    $('#text_' + currentQuest[quest_counter-1]).val(currentXpath + $("#content_" + currentQuest[quest_counter-1]).val());
     BindChangeContentDropdown(currentXpath, currentQuest[quest_counter-1]);
+    currentXpath = currentXpath + $("#content_" + currentQuest[quest_counter-1]).val();
+    var textArea = $('textarea#text_' + currentQuest[quest_counter - 1]);
+    $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
     HighlightSelectedXpath(currentXpath);
+    textArea.height(textArea[0].scrollHeight);
+    PrintXpathElementData(currentXpath);
 }
 
 function HelloWorld(h, w){
@@ -100,6 +113,10 @@ function WindowsScrollHandler() {
     var p2 = $("#output_DataToDB").position();
     if ((set1 - p2.top > 150) || (set1 - p2.top < -700)) {
         $('#output_DataToDB').animate({top: set1 + "px"}, {duration: 500, queue: false});
+    }
+    var p3 = $("#output_view").position();
+    if ((set1 - p2.top > 150) || (set1 - p2.top < -700)) {
+        $('#output_view').animate({top: set1 + "px"}, {duration: 500, queue: false});
     }
 }
 
@@ -171,14 +188,9 @@ $(document).ready(function(){
             SelectedList = ListOfElements;
             SelectedStart = indexOfStart;
             SelectedEnd = indexOfEnd;
-            var currentXpath = GetXpathString(SelectedStart, SelectedEnd, ListOfElements);
-            BindChangeContentDropdown(currentXpath, currentQuest[quest_counter]);
-            var textArea = $('textarea#text_' + currentQuest[quest_counter]);
-            textArea.val(currentXpath + "/text()");
-            textArea.height(textArea[0].scrollHeight);
-            HighlightSelectedXpath(currentXpath);
             CheckIfUserFinishedInput();
             quest_counter++;
+            UpdateAfterXPathChanged();
             $("#quest").text(currentQuest[quest_counter]);
         }
     });

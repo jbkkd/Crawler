@@ -18,18 +18,24 @@ function HighlightSelectedXpath(xpath) {
         $(listOfResults[i]).addClass("selectedXpathHighLight");
     }
 }
+function RemoveClass(element) {
+    element.removeClass("elmHover");
+    if (element.attr("class") == "") {
+        element.removeAttr("class");
+    }
+}
 function RemoveHighLightClasses(removeSelectedHighlight, element) {
     if (removeSelectedHighlight) {
         $(".selectedXpathHighLight").removeClass("selectedXpathHighLight");
     }
     if (element) {
-        $(element).removeClass("elmHover");
-        if($(element).class == ""){
-            $(element).removeAttr("class");
-        }
+        RemoveClass($(element));
     }
     else {
-        $(".elmHover").removeClass("elmHover");
+        $(".elmHover").each(function()
+        {
+            RemoveClass($(this));
+        });
     }
 }
 
