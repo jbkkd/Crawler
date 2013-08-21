@@ -62,7 +62,7 @@ function PrintXpathElementData(currentXpath) {
  */
 function UpdateAfterXPathChanged(){ //TODO: Idont think that function should looks/called like that
     var currentXpath = GetXpathString(SelectedStart, SelectedEnd, SelectedList);
-    BindChangeContentDropdown(currentXpath, currentQuest[quest_counter-1]);
+    InitializeOutputDropdown(currentXpath, currentQuest[quest_counter-1]);
     currentXpath = currentXpath + $("#content_" + currentQuest[quest_counter-1]).val();
     var textArea = $('textarea#text_' + currentQuest[quest_counter - 1]);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
@@ -205,9 +205,8 @@ $(document).ready(function(){
     });
 
     $("#output_DataToDB").on("change", "select[id^=content]", function(){
-        BindChangeAttributeOfLastElement.call(this);
+        OnOutputDropdownChange.call(this);
     });
-
 
     //Event handler for hover:
     $('#output_textboxs').mouseover(function (evt) {

@@ -5,6 +5,7 @@
  * Time: 16:52
  * To change this template use File | Settings | File Templates.
  */
+
 function BindSelectTextarea() {
     indexOfSelectionStart = this.selectionStart;
     indexOfSelectionEnd = this.selectionEnd;
@@ -18,21 +19,24 @@ function BindSelectTextarea() {
     }
 }
 
-
-function BindChangeAttributeOfLastElement() { //TODO: Should i replace the .call(this) with string?
+function OnOutputDropdownChange() { //TODO: Should i replace the .call(this) with string?
     var IDOfThis = this.id.slice(8, this.id.length);
-    var n = $("#text_" + IDOfThis).val().lastIndexOf("/");
-    var prevWord = $("#text_" + IDOfThis).val().slice(n, $("#text_" + IDOfThis).val().length);
+    var xpathTextbox = $("#text_" + IDOfThis);
+    var indexOfLastSlash = xpathTextbox.val().lastIndexOf("/");
+    if (xpathTextbox.val()[indexOfLastSlash - 1] == "/") {
+        indexOfLastSlash -= 1;
+    }
+    var prevWord = xpathTextbox.val().slice(indexOfLastSlash, xpathTextbox.val().length);
 
     if (prevWord.indexOf("/@") == 0 || prevWord.indexOf("//text()") == 0) {
-        $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val().replace(prevWord, this.value));
+        xpathTextbox.val(xpathTextbox.val().replace(prevWord, this.value));
     }  else {
-        $("#text_" + IDOfThis).val($("#text_" + IDOfThis).val() + (this.value));
+        xpathTextbox.val(xpathTextbox.val() + (this.value));
     }
-    PrintXpathElementData($("#text_" + IDOfThis).val())
+    PrintXpathElementData(xpathTextbox.val())
 }
 
-function BindChangeContentDropdown(currentXpath, textboxID){
+function InitializeOutputDropdown(currentXpath, textboxID){
     $("#content_" + textboxID).empty();
     $("#content_" + textboxID).append($('<option>', {
             value: "//text()",
