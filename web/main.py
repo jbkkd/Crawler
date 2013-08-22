@@ -19,8 +19,8 @@ SimpleTemplate.defaults["get_url"] = application.get_url
 @application.post('/a')
 def build_page():
     if request.json is not None and "newURL" in request.json.keys():  # User asks for new url
-        baseHTML = request.json["newURL"]
-        return "newURL"
+        new_url = request.json["newURL"]
+
     elif request.json is not None and "site_link" in request.json.keys():  # User sending DataToDB
         DBHandler = XPathsHandler(request.json["site_link"])
         new_data = request.json
@@ -28,18 +28,18 @@ def build_page():
         DBHandler.save_xpaths(request.json["page_type"], new_data)
         return "Tnx for the data. We WILL use it!"
     else:
-        baseHTML = 'http://forums.macrumors.com/showthread.php?t=1611153'
+        new_url = 'http://www.iphoneforums.net/forum/hacking-tutorials-guides-68/how-downgrade-your-iphone4s-ipad2-ipad3-39409/'
 
-    # user_agent = "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)"  # Or any valid user agent from a real browser
-    # headers = {"User-Agent": user_agent}
-    # req = urllib2.Request(baseHTML, headers=headers)
-    # forumHTML = urllib2.urlopen(req)
+    user_agent = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"  # Or any valid user agent from a real browser
+    headers = {"User-Agent": user_agent}
+    req = urllib2.Request(new_url, headers=headers)
+    forumHTML = urllib2.urlopen(req)
 
-    forumHTML = site_stringy()
+    # forumHTML = site_stringy()
 
     page = Soup(forumHTML)
 
-    for e in page.findAll(['script', 'link']):
+    for e in page.findAll(['script', '']):
         e.extract()
     return str(page)
 
@@ -76,4 +76,4 @@ def showitem():
     return output
 
 
-run(application, host='localhost', port=8080, debug=True, reloader=True)
+run(application, host='localhost', port=8080, reloader=True)

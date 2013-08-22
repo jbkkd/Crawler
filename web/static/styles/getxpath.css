@@ -2,22 +2,22 @@
     width:500px;
     height:300px;
 }
-.float_menus {
-	position:absolute;
-    background-color: rgba(21, 156, 255, 0.85);
-	width:400px;
-	height:200px;
-	border-radius: 2px;
-	margin: 20px 50px 50px 5px;
-	border: 2px solid;
-	color: #000000;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-	text-align: center;
-    z-index: 10000;
-    overflow:auto;
-    word-break: break-all;
+
+.float_menus  {
+	position:absolute !important;
+    background-color: rgba(21, 156, 255, 0.85) !important;
+	width:400px !important;
+	height:200px !important;
+	margin: 20px 50px 50px 5px !important;
+	border: 2px solid !important;
+	color: #000000 !important;
+	-webkit-border-radius: 20px !important;
+	-moz-border-radius: 20px !important;
+	border-radius: 20px !important;
+	text-align: center !important;
+    z-index: 10000 !important;
+    overflow:auto !important;
+    word-break: break-all !important;
 }
 .elmHover{
     outline: 2px solid #de0002;
@@ -25,3 +25,4 @@
 .selectedXpathHighLight{
     outline: 2px solid #262ef0;
 }
+

@@ -3,7 +3,6 @@ var currentQuest = [];
 var DataToDB = {};
 var pageType = "thread";
 
-
 //Vars for XPaths Generator:
 var ListOfElements = [];
 var indexOfStart = 0;
@@ -17,7 +16,6 @@ var CurrentMouseTarget;
 //vars that maybe we should put in class:(anyway - its not the way to pass the information)
 var indexOfSelectionStart, indexOfSelectionEnd;
 var SelectedTextArea;
-
 
 var threadQuest = [
     'site_link',
@@ -46,7 +44,6 @@ var forumQuest = [
     'thread_ratings'
 ];
 
-
 function PrintXpathElementData(currentXpath) {
     var xpathsResults = $(document).xpath(currentXpath);
     var outputView = $("#output_view");
@@ -67,14 +64,14 @@ function UpdateAfterXPathChanged(){ //TODO: Idont think that function should loo
     var textArea = $('textarea#text_' + currentQuest[quest_counter - 1]);
     $('#text_' + currentQuest[quest_counter-1]).val(currentXpath);
     HighlightSelectedXpath(currentXpath);
-    textArea.height(textArea[0].scrollHeight);
+
+    textArea.height(textArea[0].scrollHeight - (textArea[0].scrollHeight - textArea.height()));
     PrintXpathElementData(currentXpath);
 }
 
 function HelloWorld(h, w){
     return h + " " + w;
 }
-
 
 function InitializeDBData(DataToDB) {
     $.each(DataToDB, function (key) {
@@ -120,7 +117,6 @@ function WindowsScrollHandler() {
     }
 }
 
-
 $(document).ready(function(){
     // TODO: make a python(via AJAX) function to get site_link/page_link/page_number
 
@@ -136,7 +132,8 @@ $(document).ready(function(){
         url: "/a",
         type: "POST",
         success: function(response){
-            $('#output_textboxs').html(response);
+            $('#output_page')[0].contentDocument.write(response);
+            $('#output_page')[0].contentDocument.close();
         }
     });
 
@@ -165,7 +162,7 @@ $(document).ready(function(){
             data: JSON.stringify({"newURL": $("#GetByURL_input").val()}),
             contentType: "application/json",
             success: function(response) {
-                $('#output_textboxs').html(response);
+                $('#output_page').html(response);
             }
         });
     });
@@ -198,6 +195,7 @@ $(document).ready(function(){
     $("#output_DataToDB").on("select", "textarea", function(){ //This does x and y
         BindSelectTextarea.call(this);
     });
+
     $("#output_DataToDB").on("change", "select#xpathOperators", function(){
         if(this.value != ""){
             SelectedTextArea.value = SelectedTextArea.value.slice(0, indexOfSelectionStart) + this.value + SelectedTextArea.value.slice(indexOfSelectionEnd, SelectedTextArea.value.length);
@@ -209,11 +207,11 @@ $(document).ready(function(){
     });
 
     //Event handler for hover:
-    $('#output_textboxs').mouseover(function (evt) {
+    $('#output_page').contents().on("mouseover", function (evt) { //TODO: FIX THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS(iframe events)
         BindMouseHoverElement(evt);
     }).mouseout(function(evt){
-            RemoveHighLightClasses(false, evt.target);
-        });
+        RemoveHighLightClasses(false, evt.target);
+    });
 
     //Scrolling the .float_menus div to my view
     $(window).scroll(WindowsScrollHandler);

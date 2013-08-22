@@ -39,11 +39,11 @@ function OnOutputDropdownChange() { //TODO: Should i replace the .call(this) wit
 function InitializeOutputDropdown(currentXpath, textboxID){
     $("#content_" + textboxID).empty();
     $("#content_" + textboxID).append($('<option>', {
-            value: "//text()",
-            text : "//text()"
-        })).append($('<option>', {
             value: "",
             text : ""
+        })).append($('<option>', {
+            value: "//text()",
+            text : "//text()"
         }));
 
     $.each(GetAttributesOfLastElementInXPath(currentXpath), function(index, value){

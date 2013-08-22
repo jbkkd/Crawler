@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="output_DataToDB" class="float_menus">
-    <u>Currently XPaths Data:</u><br>
+    <span style="text-decoration: underline;">Currently XPaths Data:</span><br>
     <select id="page_type">
         <option>thread</option>
         <option>forum</option>
@@ -25,7 +25,7 @@
     <div id="output_DataToDB_list"></div>
 </div>
 
-<div id="output_code" class="float_menus" style="left: 1010px">
+<div id="output_code" class="float_menus" style="left: 910px">
     Hey, please select the:
     <i><div id="quest"></div></i>
     and press <b>ENTER</b>
@@ -38,7 +38,7 @@
 
 </div>
 
-<div id="output_textboxs"></div>
+<iframe id="output_page" style="width:100%;"></iframe>
 </body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
