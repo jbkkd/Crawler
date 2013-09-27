@@ -3,7 +3,7 @@
 #
 from bs4 import BeautifulSoup as Soup
 import urllib2
-from just_stupid_function import site_stringy
+from HTML_of_target_site import site_stringy
 import os
 from XPaths.XPaths import XPathsHandler
 from Urls.Urls import UrlsHandler
